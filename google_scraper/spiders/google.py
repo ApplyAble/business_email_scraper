@@ -12,7 +12,7 @@ load_dotenv()
 API_KEY = os.getenv('API_KEY')
 
 NUM_RESULTS = 3  # 100 is the max
-CONCURRENT_REQUESTS = 3  # 10 is the max
+CONCURRENT_REQUESTS = 10  # 10 is the max
 
 # take the queries from a csv file
 
@@ -56,8 +56,8 @@ class GoogleSpider(scrapy.Spider):
 
     def start_requests(self):
         queries = get_queries('businesses.csv')
-        for query in queries[:10]:
-            url = create_google_url(query + " brisbane contact")
+        for query in queries:
+            url = create_google_url(query + " email")
             yield scrapy.Request(get_url(url), callback=self.parse, meta={'pos': 0})
 
     def parse(self, response):
