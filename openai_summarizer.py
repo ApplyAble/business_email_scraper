@@ -135,7 +135,50 @@ def json_to_csv(filename):
     # close the file
     contact_details_data.close()
 
+# function to remove entries with duplicate emails from the csv
+# also remove entries which don't match an email
+def remove_duplicates(filename):
+    # create a dictionary to store the email and name
+    email_name_dict = {}
+
+    # open the csv file
+    with open(filename, 'r') as f:
+        # create a csv reader object
+        csvreader = csv.reader(f)
+
+        # skip the header
+        next(csvreader)
+
+        # iterate through the rows
+        for row in csvreader:
+            # get the email and name
+            email = row[1]
+            name = row[0]
+
+            # if the email is not in the dictionary
+            if email not in email_name_dict:
+                # add the email and name to the dictionary
+                email_name_dict[email] = name
+
+    # open a file for writing
+    contact_details_data = open('contact_details.csv', 'w')
+
+    # create the csv writer object
+    csvwriter = csv.writer(contact_details_data)
+
+    # write the header
+    header = ['name', 'email']
+    csvwriter.writerow(header)
+
+    # write the data
+    for email, name in email_name_dict.items():
+        csvwriter.writerow([name, email])
+
+    # close the file
+    contact_details_data.close()
+
 # test the function
 # create_contact_details_file('test.csv')
 
 json_to_csv('contact_details.json')
+remove_duplicates('contact_details.csv')
