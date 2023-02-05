@@ -11,10 +11,12 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
 
-NUM_RESULTS = 10  # 100 is the max
-CONCURRENT_REQUESTS = 2  # 10 is the max
+NUM_RESULTS = 3  # 100 is the max
+CONCURRENT_REQUESTS = 3  # 10 is the max
 
 # take the queries from a csv file
+
+
 def get_queries(filename):
     with open(filename, 'r') as f:
         queries = f.readlines()
@@ -45,6 +47,7 @@ def get_emails(line):
         return emails
     return ""
 
+
 class GoogleSpider(scrapy.Spider):
     name = 'google'
     allowed_domains = ['api.scraperapi.com']
@@ -53,8 +56,8 @@ class GoogleSpider(scrapy.Spider):
 
     def start_requests(self):
         queries = get_queries('businesses.csv')
-        for query in queries:
-            url = create_google_url(query)
+        for query in queries[:10]:
+            url = create_google_url(query + " brisbane contact")
             yield scrapy.Request(get_url(url), callback=self.parse, meta={'pos': 0})
 
     def parse(self, response):

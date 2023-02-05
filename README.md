@@ -29,10 +29,14 @@ Install Dependencies
 
 Setup
 - `git clone` this repo
-- Replace the `businesses.csv` (see input format) with your file (should be named `businesses.csv`)
+- Make a `businesses.csv` file with your data *(see input format)*
 - You need to use a proxy if you want to scrape at any reasonable scale. *If you don’t, you could get flagged and get your IP-banned*
     - Create a scraperapi account: follow [this link](https://www.scraperapi.com/signup)
-- Paste your `API_KEY` into the `.env` file
+- Paste your API key into the `.env` file as `API_KEY=<your_api_key>`
+
+GPT3
+- make an [OpenAI](https://labs.openai.com/) account and get the API keys
+- Paste the API keys into `.env` as `OPEN_API_KEY=<your_key>`
 
 ___
 ### Run
