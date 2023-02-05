@@ -73,5 +73,69 @@ def extract_contact_details(text):
     contact_details = json.loads(response.choices[0].text)
     return contact_details
 
+# convert all keys to lowercase in a JSON
+def convert_keys_to_lowercase(json):
+    # define an empty dictionary
+    new_json = {}
+
+    # iterate through the json
+    for key, value in json.items():
+        # convert the key to lowercase
+        key = key.lower()
+
+        # if the value is a dictionary
+        if isinstance(value, dict):
+            # convert the keys to lowercase
+            value = convert_keys_to_lowercase(value)
+
+        # add the key and value to the new json
+        new_json[key] = value
+
+    return new_json
+
+# find the value of a key in a nested JSON
+def find_value_of_key(json, key):
+    # iterate through the json
+    for k, v in json.items():
+        # if the key is found
+        if k == key:
+            # return the value
+            return v
+
+        # if the value is a dictionary
+        if isinstance(v, dict):
+            # find the value of the key in the dictionary
+            item = find_value_of_key(v, key)
+            if item is not None:
+                return item
+
+# convert a given json into csv
+def json_to_csv(filename):
+    # read the json file
+    with open(filename, 'r') as f:
+        contact_details = json.load(f)
+        contact_details = [convert_keys_to_lowercase(contact) for contact in contact_details]
+
+    # open a file for writing
+    contact_details_data = open('contact_details.csv', 'w')
+
+    # create the csv writer object
+    csvwriter = csv.writer(contact_details_data)
+
+    # write the header
+    header = ['name', 'email']
+    csvwriter.writerow(header)
+
+    # write the data
+    for contact in contact_details:
+        name = find_value_of_key(contact, 'name')
+        email = find_value_of_key(contact, 'email')
+        csvwriter.writerow([name, email])
+
+    # close the file
+    contact_details_data.close()
+
 # test the function
-create_contact_details_file('test.csv')
+# create_contact_details_file('test.csv')
+
+json_to_csv('contact_details.json')
